@@ -1,6 +1,7 @@
 import React from 'react'
 import Blog from './components/Blog'
 import { Notification, NotificationAlert } from './components/Notification'
+import Toggleable from './components/Toggleable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
@@ -12,7 +13,7 @@ class App extends React.Component {
       blogs: [],
       username: '',
       password: '',
-      notification: 'test',
+      notification: null,
       error: null,
       user: null,
       newBlogAuthor: '',
@@ -22,8 +23,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
       this.setState({ blogs })
+      this.sortBlogs()
+      }
     )
 
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -50,6 +53,34 @@ class App extends React.Component {
     setTimeout(() => {
       this.setState({error: null})
     }, 5000)
+  }
+
+  addLikes = (id) => {
+    const targetBlogIndex = this.state.blogs.findIndex(m => m.id === id)
+    var newBlogArray = this.state.blogs
+    newBlogArray[targetBlogIndex].likes += 1
+    this.setState({blogs: newBlogArray})
+    this.sortBlogs()
+  }
+
+  deleteBlog = async (id) => {
+    var newBlogs = this.state.blogs
+    const deleteIndex = newBlogs.findIndex(m => m.id === id)
+    if (this.state.blogs[deleteIndex].user.username === this.state.user.username) {
+
+      await blogService.deleteBlog(id)
+      
+      newBlogs.splice(deleteIndex, 1)
+      this.setState({blogs: newBlogs})
+    } else {
+      console.log('forbidden: wrong user')
+    }
+  }
+
+  sortBlogs = () => {
+    var sortedBlogs = this.state.blogs
+    sortedBlogs.sort((a,b) => b.likes - a.likes)
+    this.setState({blogs: sortedBlogs})
   }
 
   login = async (event) => {
@@ -121,10 +152,10 @@ class App extends React.Component {
 
     const loginForm = () => (
       <div>
-        <h2>Kirjaudu sovellukseen</h2>
+        <h2>Please login</h2>
         <form onSubmit={this.login}>
           <div>
-            Käyttäjätunnus:
+            User name:
             <input 
               type="text"
               name="username"
@@ -133,7 +164,7 @@ class App extends React.Component {
             />
           </div>
           <div>
-            Salasana:
+            Password:
             <input
               type="password"
               name="password"
@@ -141,7 +172,7 @@ class App extends React.Component {
               onChange={this.handleLoginFormChange}
             />
           </div>
-          <button type="submit">Kirjaudu</button>
+          <button type="submit">Login</button>
         </form>
 
         {this.state.notification !== null && notification()}
@@ -158,33 +189,42 @@ class App extends React.Component {
         <div>logged in as {this.state.user.name} </div>
         <button type="button" onClick={this.logout}>Logout</button>
 
-        <form onSubmit={this.submitBlog}>
-          <div>Blog author: <input 
-              type="text"
-              name="newBlogAuthor"
-              value={this.state.newBlogAuthor}
-              onChange={this.handleNewBlogFormChange}
-            />
-          </div>
-          <div>Blog title: <input 
-              type="text"
-              name="newBlogTitle"
-              value={this.state.newBlogTitle}
-              onChange={this.handleNewBlogFormChange}
-            />
-          </div>
-          <div>Blog url: <input 
-              type="text"
-              name="newBlogUrl"
-              value={this.state.newBlogUrl}
-              onChange={this.handleNewBlogFormChange}
-            />
-          </div>
-          <button type="submit">Add new blog</button>
-        </form>
+        <Toggleable buttonLabel='Submit a new blog'>
+          <form onSubmit={this.submitBlog}>
+            <div>Blog author: <input 
+                type="text"
+                name="newBlogAuthor"
+                value={this.state.newBlogAuthor}
+                onChange={this.handleNewBlogFormChange}
+              />
+            </div>
+            <div>Blog title: <input 
+                type="text"
+                name="newBlogTitle"
+                value={this.state.newBlogTitle}
+                onChange={this.handleNewBlogFormChange}
+              />
+            </div>
+            <div>Blog url: <input 
+                type="text"
+                name="newBlogUrl"
+                value={this.state.newBlogUrl}
+                onChange={this.handleNewBlogFormChange}
+              />
+            </div>
+            <button type="submit">Add new blog</button>
+          </form>
+        </Toggleable>
 
+       
         {this.state.blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog 
+            key={blog.id}
+            blog={blog}
+            onAddLike={this.addLikes}
+            canDelete={blog.user.username === undefined | this.state.user.username === blog.user.username}
+            onDelete={this.deleteBlog}
+            name={blog.id}/>
         )}
       </div>
     )
