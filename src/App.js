@@ -1,8 +1,9 @@
 import React from 'react'
 import Blog from './components/Blog'
-import Notification from './components/Notification'
+import { Notification, NotificationAlert } from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -11,8 +12,12 @@ class App extends React.Component {
       blogs: [],
       username: '',
       password: '',
-      error: '',
-      user: null
+      notification: 'test',
+      error: null,
+      user: null,
+      newBlogAuthor: '',
+      newBlogTitle: '',
+      newBlogUrl: ''
     }
   }
 
@@ -30,6 +35,10 @@ class App extends React.Component {
   }
   
   handleLoginFormChange = (event) => {
+    this.setState({[event.target.name]: event.target.value})
+  }
+
+  handleNewBlogFormChange = (event) => {
     this.setState({[event.target.name]: event.target.value})
   }
 
@@ -55,7 +64,16 @@ class App extends React.Component {
 
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      this.setState({username: '', password:'', user})
+      this.setState({
+        notification: 'logged in',
+        username: '', 
+        password:'', 
+        user
+      })
+
+      setTimeout(() => {
+        this.setState({notification: null})
+      }, 5000)
 
     } catch (exception) {
       console.log(exception)
@@ -69,11 +87,38 @@ class App extends React.Component {
         this.setState({error: null})
       }, 5000)
     }
+  }
 
-    
+  submitBlog = async (event) => {
+    event.preventDefault()
+
+    try{
+      const newBlog = {
+        author: this.state.newBlogAuthor,
+        title: this.state.newBlogTitle,
+        url: this.state.newBlogUrl
+      }
+
+      const response = await blogService.postBlog(newBlog)
+      blogService.getAll().then(blogs => this.setState({ blogs }))
+
+      this.setState({notification: 'New blog added'})
+      setTimeout(() => {this.setState({notification: null})}, 5000)
+
+    } catch (expection) {
+
+    }
   }
 
   render() {
+    const notification = () => (
+      <Notification text={this.state.notification} />
+    )
+
+    const notificationAlert = () => (
+      <NotificationAlert text={this.state.error} />
+    )
+
     const loginForm = () => (
       <div>
         <h2>Kirjaudu sovellukseen</h2>
@@ -98,8 +143,9 @@ class App extends React.Component {
           </div>
           <button type="submit">Kirjaudu</button>
         </form>
-  
-        <Notification text={this.state.error} />
+
+        {this.state.notification !== null && notification()}
+        {this.state.error !== null && notificationAlert()}
   
       </div>
     )
@@ -107,8 +153,36 @@ class App extends React.Component {
     const blogList = () => (
       <div>
         <h2>blogs</h2>
+        {this.state.notification !== null && notification()}
+        {this.state.error !== null && notificationAlert()}
         <div>logged in as {this.state.user.name} </div>
-        <button type="submit" onClick={this.logout}>Logout</button>
+        <button type="button" onClick={this.logout}>Logout</button>
+
+        <form onSubmit={this.submitBlog}>
+          <div>Blog author: <input 
+              type="text"
+              name="newBlogAuthor"
+              value={this.state.newBlogAuthor}
+              onChange={this.handleNewBlogFormChange}
+            />
+          </div>
+          <div>Blog title: <input 
+              type="text"
+              name="newBlogTitle"
+              value={this.state.newBlogTitle}
+              onChange={this.handleNewBlogFormChange}
+            />
+          </div>
+          <div>Blog url: <input 
+              type="text"
+              name="newBlogUrl"
+              value={this.state.newBlogUrl}
+              onChange={this.handleNewBlogFormChange}
+            />
+          </div>
+          <button type="submit">Add new blog</button>
+        </form>
+
         {this.state.blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}

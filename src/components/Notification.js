@@ -1,9 +1,15 @@
 import React from 'react'
 
 const Notification = ({text}) => (
-  <div>
+  <div className="notification">
     {text}
   </div>  
 )
 
-export default Notification
+const NotificationAlert = ({text}) => (
+  <div className="notificationAlert">
+    {text}
+  </div>  
+)
+
+export {Notification, NotificationAlert}
