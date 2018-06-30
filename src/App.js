@@ -66,7 +66,8 @@ class App extends React.Component {
   deleteBlog = async (id) => {
     var newBlogs = this.state.blogs
     const deleteIndex = newBlogs.findIndex(m => m.id === id)
-    if (this.state.blogs[deleteIndex].user.username === this.state.user.username) {
+    if (this.state.blogs[deleteIndex].user.username === undefined |
+      this.state.blogs[deleteIndex].user.username === this.state.user.username) {
 
       await blogService.deleteBlog(id)
       
@@ -130,7 +131,7 @@ class App extends React.Component {
         url: this.state.newBlogUrl
       }
 
-      const response = await blogService.postBlog(newBlog)
+      await blogService.postBlog(newBlog)
       blogService.getAll().then(blogs => this.setState({ blogs }))
 
       this.setState({notification: 'New blog added'})
@@ -215,14 +216,13 @@ class App extends React.Component {
             <button type="submit">Add new blog</button>
           </form>
         </Toggleable>
-
-       
+  
         {this.state.blogs.map(blog =>
           <Blog 
             key={blog.id}
             blog={blog}
             onAddLike={this.addLikes}
-            canDelete={blog.user.username === undefined | this.state.user.username === blog.user.username}
+            canDelete={blog.user.username === undefined || this.state.user.username === blog.user.username}
             onDelete={this.deleteBlog}
             name={blog.id}/>
         )}

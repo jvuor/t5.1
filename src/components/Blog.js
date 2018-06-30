@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import PropTypes from 'prop-types'
 
 const baseUrl = '/api/blogs'
 
@@ -7,6 +8,13 @@ class Blog extends React.Component{
   constructor(props) {
     super(props)
     this.state = { expanded: false }
+  }
+
+  static propTypes = {
+    blog: PropTypes.object.isRequired,
+    onAddLike: PropTypes.func.isRequired,
+    onDelete: PropTypes.func,
+    canDelete: PropTypes.bool
   }
 
   toggleExpandedState= () => {
