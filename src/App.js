@@ -234,7 +234,6 @@ class App extends React.Component {
         loginForm()
       )
     }
-  
     return (
       blogList()
     )
