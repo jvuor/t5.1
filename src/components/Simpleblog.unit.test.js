@@ -13,9 +13,13 @@ describe('<SimpleBlog />', () => {
     var blogComponent
     var topContent
     var bottomContent
+    var mockButton = jest.fn()
 
     beforeEach(() => {
-        blogComponent = shallow(<SimpleBlog blog={testBlog} />)
+        blogComponent = shallow(<SimpleBlog 
+            blog={testBlog} 
+            onClick={mockButton}
+        />)
         topContent = blogComponent.find('.topcontent')
         bottomContent = blogComponent.find('.bottomcontent')
     })
@@ -30,5 +34,13 @@ describe('<SimpleBlog />', () => {
 
     test('contains the number of likes', () => {
         expect(bottomContent.text()).toContain(testBlog.likes.toString())
+    })
+
+    test('Like-button works', () => {
+        const uiButton = blogComponent.find('button')
+        uiButton.simulate('click')
+        uiButton.simulate('click')
+
+        expect(mockButton.mock.calls.length).toBe(2)
     })
 })

@@ -57,13 +57,13 @@ class Blog extends React.Component{
   
     if (this.state.expanded === false) {
       return(
-        <div style={blogStyle} onClick={this.toggleExpandedState}>
+        <div style={blogStyle} onClick={this.toggleExpandedState} className="content">
           {blog.title}, {blog.author}
         </div>  
       )
     } else {
       return(
-        <div style={blogStyle} onClick={this.toggleExpandedState}>         
+        <div style={blogStyle} onClick={this.toggleExpandedState} className="content">         
           {blog.title}, {blog.author} <br />
           <a href={blog.url} target='_blank' onClick={this.clickHandler}>{blog.url}</a> <br />
           {blog.likes} likes
