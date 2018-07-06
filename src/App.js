@@ -1,10 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Blog from './components/Blog'
-import { Notification, NotificationAlert } from './components/Notification'
+import Notification from './components/notification/Notification'
 import Toggleable from './components/Toggleable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import './index.css'
+import { actionNotificationSet } from './store/actions/notificationActions'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,8 +14,6 @@ class App extends React.Component {
       blogs: [],
       username: '',
       password: '',
-      notification: null,
-      error: null,
       user: null,
       newBlogAuthor: '',
       newBlogTitle: '',
@@ -49,10 +48,8 @@ class App extends React.Component {
     console.log('logging out')
     window.localStorage.removeItem('loggedUser')
 
-    this.setState({user: null, error:'logged out'})
-    setTimeout(() => {
-      this.setState({error: null})
-    }, 5000)
+    this.setState({user: null})
+    this.props.actionNotificationSet('Logged out')
   }
 
   addLikes = (id) => {
@@ -74,7 +71,7 @@ class App extends React.Component {
       newBlogs.splice(deleteIndex, 1)
       this.setState({blogs: newBlogs})
     } else {
-      console.log('forbidden: wrong user')
+      this.props.actionNotificationSet('Forbidden: wrong user', alert)
     }
   }
 
@@ -88,7 +85,6 @@ class App extends React.Component {
     event.preventDefault()
 
     try{
-      console.log(this.state.username, this.state.password) //this is dangerous
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
@@ -97,27 +93,19 @@ class App extends React.Component {
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       this.setState({
-        notification: 'logged in',
         username: '', 
         password:'', 
         user
       })
-
-      setTimeout(() => {
-        this.setState({notification: null})
-      }, 5000)
+      this.props.actionNotificationSet(`Logged in`)
 
     } catch (exception) {
       console.log(exception)
       this.setState({
-        error: 'virheellinen käyttäjätunnus tai sanasana',
         username: '',
         password: ''
       })
-
-      setTimeout(() => {
-        this.setState({error: null})
-      }, 5000)
+      this.props.actionNotificationSet('Wrong username or password!', alert)
     }
   }
 
@@ -134,8 +122,7 @@ class App extends React.Component {
       await blogService.postBlog(newBlog)
       blogService.getAll().then(blogs => this.setState({ blogs }))
 
-      this.setState({notification: 'New blog added'})
-      setTimeout(() => {this.setState({notification: null})}, 5000)
+      this.props.actionNotificationSet('New blog added!')
 
     } catch (expection) {
 
@@ -143,14 +130,6 @@ class App extends React.Component {
   }
 
   render() {
-    const notification = () => (
-      <Notification text={this.state.notification} />
-    )
-
-    const notificationAlert = () => (
-      <NotificationAlert text={this.state.error} />
-    )
-
     const loginForm = () => (
       <div>
         <h2>Please login</h2>
@@ -176,8 +155,7 @@ class App extends React.Component {
           <button type="submit">Login</button>
         </form>
 
-        {this.state.notification !== null && notification()}
-        {this.state.error !== null && notificationAlert()}
+        <Notification />
   
       </div>
     )
@@ -185,8 +163,7 @@ class App extends React.Component {
     const blogList = () => (
       <div>
         <h2>blogs</h2>
-        {this.state.notification !== null && notification()}
-        {this.state.error !== null && notificationAlert()}
+        <Notification />
         <div>logged in as {this.state.user.name} </div>
         <button type="button" onClick={this.logout}>Logout</button>
 
@@ -240,4 +217,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(null, { actionNotificationSet })(App)
