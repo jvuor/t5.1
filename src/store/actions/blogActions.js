@@ -34,11 +34,11 @@ export const actionBlogDelete = (id) => {
 
 export const actionBlogLike = (id) => {
   return async (dispatch) => {
-    await blogService.upvoteBlog(id)
-    
     dispatch({
       type: 'BLOGADDLIKE',
       id: id
     })
+
+    await blogService.upvoteBlog(id)
   }
 }

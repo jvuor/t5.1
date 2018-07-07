@@ -6,10 +6,11 @@ import Notification from './components/notification/Notification'
 import Menubar from './components/Menubar'
 import Login from './components/login/Login'
 import BlogList from './components/BlogList'
+import NewBlog from './components/NewBlog'
 
 import { actionUserFromStorage } from './store/actions/userActions'
+import { actionBlogInit } from './store/actions/blogActions'
 import { actionNotificationSet } from './store/actions/notificationActions'
-import { actionBlogInit, actionBlogLike, actionBlogDelete, actionBlogAdd } from './store/actions/blogActions'
 import initializeUser from './util/userInitialization'
 
 class App extends React.Component {
@@ -28,6 +29,7 @@ class App extends React.Component {
             <Notification />
             <Login />
             <BlogList />
+            <NewBlog />
           </div>
         </Router>
       </div>
@@ -35,17 +37,8 @@ class App extends React.Component {
   }
 }
 
-const mapStoreToProps = (state) => {
-  return {
-    blogs: state.blogs
-  }
-}
-
-export default connect(mapStoreToProps,
-  { actionNotificationSet, 
-    actionBlogInit,
-    actionBlogLike,
-    actionBlogDelete,
-    actionBlogAdd,
-    actionUserFromStorage
+export default connect(null,
+  { actionNotificationSet,
+    actionUserFromStorage,
+    actionBlogInit
    })(App)

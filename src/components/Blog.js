@@ -1,8 +1,5 @@
 import React from 'react'
-import axios from 'axios'
 import PropTypes from 'prop-types'
-
-const baseUrl = '/api/blogs'
 
 class Blog extends React.Component{
   constructor(props) {
@@ -28,14 +25,6 @@ class Blog extends React.Component{
   addLikes = async (event) => {
     event.stopPropagation()
     const id = event.target.name
-
-    const targetBlogData = await axios.get(`${baseUrl}/${id}`)
-    var targetBlog = targetBlogData.data
-
-    targetBlog.likes += 1
-
-    await axios.put(`${baseUrl}/${id}`, targetBlog)
-
     this.props.onAddLike(id)
   }
 

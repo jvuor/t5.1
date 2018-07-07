@@ -15,25 +15,28 @@ class BlogList extends React.Component {
 
   render() {
     if (!this.props.blogs) {
-      return(<p>empty bloglist</p>)
+      return(null)
     } else {
-    return (
-      this.props.blogs.map(blog =>
-        <Blog 
-          key={blog.id}
-          blog={blog}
-          onAddLike={this.addLikes}
-          canDelete={null}
-          onDelete={this.deleteBlog}
-          name={blog.id}/>
+      return (
+        this.props.blogs.map(blog =>
+          <Blog 
+            key={blog.id}
+            blog={blog}
+            onAddLike={this.addLikes}
+            canDelete={this.props.user.id === blog.user._id}
+            onDelete={this.deleteBlog}
+            name={blog.id}
+          />
+        ) 
       )
-    )}
+    }
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    blogs: state.blogs
+    blogs: state.blogs,
+    user: state.user
   }
 }
 
