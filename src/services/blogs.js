@@ -1,5 +1,8 @@
 import axios from 'axios'
+
 const baseUrl = '/api/blogs'
+
+//TODO: add at least some kind of error handling
 
 var token = null
 
@@ -12,7 +15,7 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
-const postBlog = async (newBlog)=> {
+const postBlog = async (newBlog)=> { 
   const config = {
     headers: { 'Authorization': token}
   }
@@ -32,4 +35,15 @@ const deleteBlog = async (id) => {
   return response.data
 }
 
-export default { getAll, setToken, postBlog, deleteBlog }
+const upvoteBlog = async (id) => {
+  const config = {
+    headers: { 'Authorization': token}   
+  }
+
+  const response = await axios.get(`${baseUrl}/${id}`, config)
+  const blogData = response.data
+  blogData.likes += 1
+  await axios.put(`${baseUrl}/${id}`, blogData, config)
+}
+
+export default { getAll, setToken, postBlog, deleteBlog, upvoteBlog }
