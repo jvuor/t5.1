@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button } from 'semantic-ui-react'
 
 class Blog extends React.Component{
   constructor(props) {
@@ -22,9 +23,7 @@ class Blog extends React.Component{
     event.stopPropagation()
   }
 
-  addLikes = async (event) => {
-    event.stopPropagation()
-    const id = event.target.name
+  addLikes = async (id) => {
     this.props.onAddLike(id)
   }
 
@@ -55,8 +54,18 @@ class Blog extends React.Component{
         <div style={blogStyle} onClick={this.toggleExpandedState} className="content">         
           {blog.title}, {blog.author} <br />
           <a href={blog.url} target='_blank' onClick={this.clickHandler}>{blog.url}</a> <br />
-          {blog.likes} likes
-          <button type='button' onClick={this.addLikes} name={blog.id}>Like</button> <br />
+          <Button
+            content='Like'
+            icon='heart'
+            label={{ basic: true, content: blog.likes }}
+            labelPosition='right'
+            onClick={(event) => {
+              event.stopPropagation()
+              this.addLikes(blog.id)}
+            }
+            name={blog.id}
+            color='red'
+          />
           added by {blog.user.name}
           {this.props.canDelete?
             <button type='button' onClick={this.deleteBlog} name={blog.id}>

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 
 class Menubar extends React.Component {
-  state = {}
-
+  state = { activeItem: window.location.pathname.substring(1) }
+  
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   render() {

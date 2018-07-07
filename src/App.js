@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Container } from 'semantic-ui-react'
 
 import Notification from './components/notification/Notification'
 import Menubar from './components/Menubar'
@@ -27,9 +28,11 @@ class App extends React.Component {
           <div>
             <Menubar />
             <Notification />
-            <Route path='/blogs' render={() => <BlogList />} />
-            <Route path='/addblog' render={() => <NewBlog />} />
-            <Route path='/login' render={() => <Login />} />
+            <Container>
+              <Route path='/blogs' render={() => <BlogList />} />
+              <Route path='/addblog' render={() => <NewBlog />} />
+              <Route path='/login' render={() => <Login />} />
+            </Container>
           </div>
         </Router>
       </div>
