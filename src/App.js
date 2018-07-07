@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import Notification from './components/notification/Notification'
 import Menubar from './components/Menubar'
@@ -27,9 +27,9 @@ class App extends React.Component {
           <div>
             <Menubar />
             <Notification />
-            <Login />
-            <BlogList />
-            <NewBlog />
+            <Route path='/blogs' render={() => <BlogList />} />
+            <Route path='/addblog' render={() => <NewBlog />} />
+            <Route path='/login' render={() => <Login />} />
           </div>
         </Router>
       </div>
