@@ -1,6 +1,6 @@
 import blogService from '../services/blogs'
 
-const initializeUserFromStorage = () => {
+const initializeLoginFromStorage = () => {
   const loggedUserJSON = window.localStorage.getItem('loggedUser')
   if(loggedUserJSON) {
     const user = JSON.parse(loggedUserJSON)
@@ -12,4 +12,4 @@ const initializeUserFromStorage = () => {
   }
 }
 
-export default initializeUserFromStorage
+export default initializeLoginFromStorage

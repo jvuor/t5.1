@@ -9,18 +9,21 @@ import Login from './components/login/Login'
 import BlogList from './components/BlogList'
 import NewBlog from './components/NewBlog'
 import FrontPage from './components/FrontPage'
+import UserList from './components/UserList'
 import Header from './components/Header'
 import Footer from './components/Footer'
 
 import { actionUserFromStorage } from './store/actions/loginActions'
 import { actionBlogInit } from './store/actions/blogActions'
 import { actionNotificationSet } from './store/actions/notificationActions'
-import initializeUser from './util/userInitialization'
+import { actionUsersInit } from './store/actions/userActions'
+import initializeLogin from './util/loginInitialization'
 
 class App extends React.Component {
   componentDidMount = async () => {
     await this.props.actionBlogInit()
-    const user = initializeUser()
+    await this.props.actionUsersInit()
+    const user = initializeLogin()
     if (user) { this.props.actionUserFromStorage(user) }
   }
 
@@ -37,6 +40,7 @@ class App extends React.Component {
               <Route path='/blogs' render={() => <BlogList />} />
               <Route path='/addblog' render={() => <NewBlog />} />
               <Route path='/login' render={() => <Login />} />
+              <Route path='/users' render={() => <UserList />} />
               <Footer />
             </Container>
           </div>
@@ -49,5 +53,6 @@ class App extends React.Component {
 export default connect(null,
   { actionNotificationSet,
     actionUserFromStorage,
-    actionBlogInit
+    actionBlogInit,
+    actionUsersInit
    })(App)
