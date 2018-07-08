@@ -23,7 +23,7 @@ class BlogList extends React.Component {
             key={blog.id}
             blog={blog}
             onAddLike={this.addLikes}
-            canDelete={this.props.user.id === blog.user._id}
+            canDelete={this.props.login.id === blog.user._id}
             onDelete={this.deleteBlog}
             name={blog.id}
           />
@@ -36,7 +36,7 @@ class BlogList extends React.Component {
 const mapStateToProps = (state) => {
   return {
     blogs: state.blogs,
-    user: state.user
+    login: state.login
   }
 }
 

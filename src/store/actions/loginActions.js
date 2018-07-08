@@ -21,7 +21,7 @@ export const actionLogin = (credentials) => {
 
 
     } catch (exception) {
-      console.log('wrong!', exception)
+      console.log('bad login', exception)
       dispatch({
         type: 'LOGOUT'
       })

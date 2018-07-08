@@ -8,8 +8,11 @@ import Menubar from './components/Menubar'
 import Login from './components/login/Login'
 import BlogList from './components/BlogList'
 import NewBlog from './components/NewBlog'
+import FrontPage from './components/FrontPage'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
-import { actionUserFromStorage } from './store/actions/userActions'
+import { actionUserFromStorage } from './store/actions/loginActions'
 import { actionBlogInit } from './store/actions/blogActions'
 import { actionNotificationSet } from './store/actions/notificationActions'
 import initializeUser from './util/userInitialization'
@@ -26,12 +29,15 @@ class App extends React.Component {
       <div>
         <Router>
           <div>
-            <Menubar />
-            <Notification />
             <Container>
+              <Header />
+              <Menubar />
+              <Notification />
+              <Route exact path='/' render={() => <FrontPage />} />
               <Route path='/blogs' render={() => <BlogList />} />
               <Route path='/addblog' render={() => <NewBlog />} />
               <Route path='/login' render={() => <Login />} />
+              <Footer />
             </Container>
           </div>
         </Router>

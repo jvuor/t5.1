@@ -3,15 +3,19 @@ import { connect } from 'react-redux'
 import Logout from './Logout'
 import LoginForm from './LoginForm'
 
-import { actionLogout, actionLogin } from '../../store/actions/userActions'
+import { actionLogout, actionLogin } from '../../store/actions/loginActions'
+import { actionNotificationSet } from '../../store/actions/notificationActions'
 
 class Login extends React.Component {
   login = async (credentials) => {
-    await this.props.actionLogin(credentials)   
+    await this.props.actionLogin(credentials)
+    if(!this.props.login.loggedIn) {
+      this.props.actionNotificationSet('Error logging in: wrong username or password!', true)
+    }
   }
 
   render () {
-    if (this.props.user.loggedIn) {
+    if (this.props.login.loggedIn) {
       return (
         <div>
           <Logout logout={this.props.actionLogout}/>
@@ -29,8 +33,8 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    login: state.login
   }
 }
   
-export default connect(mapStateToProps, { actionLogout, actionLogin })(Login)
+export default connect(mapStateToProps, { actionLogout, actionLogin, actionNotificationSet })(Login)

@@ -1,19 +1,44 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
+import { connect } from 'react-redux'
 
 class Menubar extends React.Component {
   state = { activeItem: window.location.pathname.substring(1) }
   
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
+  userLoggedIn = (
+    <Menu.Item
+      as={Link}
+      to='/login'
+      name='login'
+      onClick={this.handleItemClick}
+      color='red'
+      content='Logout'
+      icon='user'
+    />
+  )
+
+  userNotLoggedIn = (
+    <Menu.Item
+      as={Link}
+      to='/login'
+      name='login'
+      onClick={this.handleItemClick}
+      color='red'
+      content='Login'
+      icon='user'
+    />
+  )
+  
+
   render() {
     const { activeItem } = this.state
     const menuItemColor = 'red'
 
     return (
-      <Menu inverted>
-        <Menu.Item header>Blog App</Menu.Item>
+      <Menu inverted stackable>
         <Menu.Item
           as={Link}
           to='/blogs'
@@ -32,26 +57,21 @@ class Menubar extends React.Component {
           content='Add a blog'
           color={menuItemColor}
         />
-        <Menu.Item
-          as={Link}
-          to='/login'
-          name='login'
-          active={activeItem === 'login'}
-          onClick={this.handleItemClick}
-          color={menuItemColor}
-        />
+        <Menu.Menu position='right'>
+          {this.props.login.loggedIn ?
+          this.userLoggedIn :
+          this.userNotLoggedIn}
+        </Menu.Menu>       
       </Menu>
     )
   }
 }
 
-/*
-const Menubar = () => (
-  <div>
-    <Link to="/blogs">blogs</Link> |
-    <Link to="/addblog">add blog</Link> |
-    <Link to="/login">users</Link> 
-  </div>
-)
-*/
-export default Menubar
+const mapStateToProps = (state) => {
+  return {
+    login: state.login
+  }
+}
+
+
+export default connect(mapStateToProps, null)(Menubar)
