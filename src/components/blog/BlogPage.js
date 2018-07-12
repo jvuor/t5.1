@@ -2,9 +2,23 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { actionBlogLike } from '../../store/actions/blogActions'
-import { Button, Icon } from 'semantic-ui-react'
+import { Button, Icon, Divider } from 'semantic-ui-react'
 
 class BlogPage extends React.Component {
+  blogComments (comments) {
+    var commentKey = 1
+    if (comments.length === 0) {
+      return null
+    } else {
+      return (
+        <div>
+          <Divider />
+          {comments.map(comment => <div key={commentKey++}>{comment}</div>)}
+        </div>
+      )
+    }
+  }
+
   render () {
     const blog = this.props.blogs.find(m => m.id === this.props.blogId)
     if(!blog) {
@@ -32,6 +46,8 @@ class BlogPage extends React.Component {
           </h2>
           by {blog.author} <br />        
           added by {blog.user.name}
+          {this.blogComments(blog.comments)}
+
         </div>
       )
     }
