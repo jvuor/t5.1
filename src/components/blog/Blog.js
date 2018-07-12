@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button } from 'semantic-ui-react'
+import { List, Icon, Label } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 class Blog extends React.Component{
@@ -16,67 +16,30 @@ class Blog extends React.Component{
     canDelete: PropTypes.bool
   }
 
-  toggleExpandedState= () => {
-    this.setState({expanded: !this.state.expanded})
-  }
-
-  clickHandler = (event) => {
-    event.stopPropagation()
-  }
-
   addLikes = async (id) => {
     this.props.onAddLike(id)
   }
 
-  deleteBlog = async (event) => {
-    this.props.onDelete(event.target.name)
-  }
-
   render() {
     const blog = this.props.blog
-
-    const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: 'solid',
-      borderWidth: 1,
-      marginBottom: 5,
-    }
-
   
-    if (this.state.expanded === false) {
-      return(
-        <div style={blogStyle} onClick={this.toggleExpandedState} className="content">
-          {blog.title}, {blog.author}
-        </div>  
-      )
-    } else {
-      return(
-        <div style={blogStyle} onClick={this.toggleExpandedState} className="content">         
-          <Link to={`/blogs/${blog.id}`}> {blog.title}, {blog.author} </Link><br />
-          <a href={blog.url} target='_blank' onClick={this.clickHandler}>{blog.url}</a> <br />
-          <Button
-            content='Like'
-            icon='heart'
-            label={{ basic: true, content: blog.likes }}
-            labelPosition='right'
-            onClick={(event) => {
-              event.stopPropagation()
-              this.addLikes(blog.id)}
-            }
-            name={blog.id}
-            color='red'
-          />
-          added by {blog.user.name}
-          {this.props.canDelete?
-            <button type='button' onClick={this.deleteBlog} name={blog.id}>
-              Delete
-            </button>
-              : null}
-
-        </div>  
-      )
-    }
+    return (
+      <List.Item>
+        <List.Content floated='right'>
+          {blog.likes ?
+          <Label><Icon name='heart outline' color='red'/>{blog.likes}</Label> :
+          null}
+          {blog.comments.length ?
+          <Label><Icon name='comment outline' color='red'/>{blog.comments.length}</Label> :
+          null}
+        </List.Content>
+        <Link to={`/blogs/${blog.id}`}>
+          <List.Header>{blog.title}</List.Header>
+          {blog.author}
+        </Link>
+      </List.Item>
+    )
+    
     
   }
 }

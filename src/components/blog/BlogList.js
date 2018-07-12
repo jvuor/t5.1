@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Blog from './Blog'
+import { List } from 'semantic-ui-react'
 import { actionBlogLike, actionBlogDelete } from '../../store/actions/blogActions'
 
 class BlogList extends React.Component {
@@ -18,7 +19,8 @@ class BlogList extends React.Component {
       return(null)
     } else {
       return (
-        this.props.blogs.map(blog =>
+        <List divided verticalAlign='middle'>
+        {this.props.blogs.map(blog =>
           <Blog 
             key={blog.id}
             blog={blog}
@@ -27,7 +29,8 @@ class BlogList extends React.Component {
             onDelete={this.deleteBlog}
             name={blog.id}
           />
-        ) 
+        )}
+        </List> 
       )
     }
   }
