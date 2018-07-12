@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-const baseUrl = '/api/blogs'
+var baseUrl = 'http://localhost:3003/api/blogs'
+const hostname = window && window.location && window.location.hostname
+if(hostname !== 'localhost') {
+  baseUrl = '/api/blogs'
+}
 
 //TODO: add at least some kind of error handling
 

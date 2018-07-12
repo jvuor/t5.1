@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionBlogAdd } from '../store/actions/blogActions'
+import { Button } from 'semantic-ui-react'
 
 class NewBlog extends React.Component {
 
@@ -35,7 +36,7 @@ class NewBlog extends React.Component {
             name="url"
           />
         </div>
-        <button type="submit">Add new blog</button>
+        <Button>Add blog</Button>
       </form>
     )
   }

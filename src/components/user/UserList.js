@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import UserItem from './UserItem'
+import UserItem from './UserListItem'
 
 class UserList extends React.Component {
   render () {
     if (this.props.users) {
       return (
-        this.props.users.map(user => <UserItem user={user} />)
+        this.props.users.map(user => <UserItem user={user} key={user.id}/>)
       )
     } else {
       return (

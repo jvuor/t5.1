@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Blog from './Blog'
-import { actionBlogLike, actionBlogDelete } from '../store/actions/blogActions'
+import { actionBlogLike, actionBlogDelete } from '../../store/actions/blogActions'
 
 class BlogList extends React.Component {
 
