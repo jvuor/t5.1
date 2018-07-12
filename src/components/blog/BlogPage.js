@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { actionBlogLike } from '../../store/actions/blogActions'
 import { Button, Icon, Divider } from 'semantic-ui-react'
+import CommentForm from './CommentForm'
 
 class BlogPage extends React.Component {
   blogComments (comments) {
@@ -47,6 +48,7 @@ class BlogPage extends React.Component {
           by {blog.author} <br />        
           added by {blog.user.name}
           {this.blogComments(blog.comments)}
+          <CommentForm id={blog.id} />
 
         </div>
       )

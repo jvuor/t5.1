@@ -23,6 +23,14 @@ const reducer = (store = null, action) => {
   if(action.type === 'BLOGINIT') {
     return sortBlogs(action.data)
   }
+  if(action.type === 'BLOGCOMMENT') {
+    const id = action.id
+    return sortBlogs(store.map(m => 
+      m.id === id ?
+      {...m, comments: m.comments.concat(action.comment)} :
+      m
+    ))
+  }
 
   return store
 }

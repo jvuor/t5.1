@@ -11,9 +11,6 @@ class Blog extends React.Component{
 
   static propTypes = {
     blog: PropTypes.object.isRequired,
-    onAddLike: PropTypes.func.isRequired,
-    onDelete: PropTypes.func,
-    canDelete: PropTypes.bool
   }
 
   addLikes = async (id) => {

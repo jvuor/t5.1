@@ -50,4 +50,12 @@ const upvoteBlog = async (id) => {
   await axios.put(`${baseUrl}/${id}`, blogData, config)
 }
 
-export default { getAll, setToken, postBlog, deleteBlog, upvoteBlog }
+const commentBlog = async (id, comment) => {
+  const config = {
+    headers: { 'Authorization': token}
+  }
+  const response = await axios.post(`${baseUrl}/${id}/comments`, {comment}, config)
+  return response.data
+}
+
+export default { getAll, setToken, postBlog, deleteBlog, upvoteBlog, commentBlog }

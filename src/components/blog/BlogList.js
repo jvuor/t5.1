@@ -24,10 +24,6 @@ class BlogList extends React.Component {
           <Blog 
             key={blog.id}
             blog={blog}
-            onAddLike={this.addLikes}
-            canDelete={this.props.login.id === blog.user._id}
-            onDelete={this.deleteBlog}
-            name={blog.id}
           />
         )}
         </List> 

@@ -44,3 +44,15 @@ export const actionBlogLike = (id) => {
     await blogService.upvoteBlog(id)
   }
 }
+
+export const actionBlogComment = (id, comment) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'BLOGCOMMENT',
+      id: id,
+      comment: comment
+    })
+
+    await blogService.commentBlog(id, comment)
+  }
+}
