@@ -7,6 +7,7 @@ import Notification from './components/notification/Notification'
 import Menubar from './components/Menubar'
 import Login from './components/login/Login'
 import BlogList from './components/blog/BlogList'
+import BlogPage from './components/blog/BlogPage'
 import NewBlog from './components/NewBlog'
 import FrontPage from './components/FrontPage'
 import UserList from './components/user/UserList'
@@ -47,7 +48,8 @@ class App extends React.Component {
                 <Notification />
                 <Switch>
                   <Route exact path='/' render={() => <FrontPage />} />
-                  <Route path='/blogs' render={() => <BlogList />} />
+                  <Route exact path='/blogs' render={() => <BlogList />} />
+                  <Route path='/blogs/:id' render={({match}) => <BlogPage blogId={match.params.id} />} />
                   <Route path='/addblog' render={() => <NewBlog />} />
                   <Route path='/login' render={() => <Login />} />
                   <Route exact path='/users' render={() => <UserList />} />

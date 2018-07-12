@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
 class Blog extends React.Component{
   constructor(props) {
@@ -52,7 +53,7 @@ class Blog extends React.Component{
     } else {
       return(
         <div style={blogStyle} onClick={this.toggleExpandedState} className="content">         
-          {blog.title}, {blog.author} <br />
+          <Link to={`/blogs/${blog.id}`}> {blog.title}, {blog.author} </Link><br />
           <a href={blog.url} target='_blank' onClick={this.clickHandler}>{blog.url}</a> <br />
           <Button
             content='Like'
